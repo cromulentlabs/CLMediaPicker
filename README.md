@@ -49,6 +49,14 @@ your project.
 
 Step 1: Include header
 
+if using cocoapods:
+
+```
+#include <CLMediaPicker/CLMediaPicker.h>
+```
+
+or if installed manually:
+
 ```
 #include "CLMediaPicker.h"
 ```
