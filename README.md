@@ -47,12 +47,12 @@ your project.
 
 ## Example
 
-   1. Include header
+1. Include header
 
 ```
 #include "CLMediaPicker.h"
 ```
-   2. Set up delegate
+2. Set up delegate
 
 ```
 #pragma mark - CLMediaPickerDelegate
@@ -71,7 +71,7 @@ your project.
 }
 
 ```
-   3. Instantiate and show view controller
+3. Instantiate and show view controller
 
 ```
 CLMediaPicker *picker = [[CLMediaPicker alloc] init];
