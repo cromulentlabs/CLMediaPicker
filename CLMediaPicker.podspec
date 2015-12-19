@@ -40,7 +40,7 @@ Other features:
   s.frameworks   = "Foundation", "UIKit", "MediaPlayer"
   s.requires_arc = true
   s.resource_bundles = {
-    "CLMediaPickerImages" => "CLMediaPicker/CLMediaPickerImages.xcassets"
+    "CLMediaPickerImages" => "CLMediaPicker/CLMediaPickerImages.xcassets",
     "CLMediaPickerLocalization" => "CLMediaPicker/CLMediaPicker.bundle"
   }
 end
