@@ -34,7 +34,7 @@ Other features:
   s.homepage     = "https://github.com/cromulentlabs/CLMediaPicker"
   s.license      = "Apache License, Version 2.0"
   s.author       = "Greg Gardner"
-  s.platform     = :ios, "7.0"
+  s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/cromulentlabs/CLMediaPicker.git", :tag => "#{s.version}" }
   s.source_files = "CLMediaPicker/**/*.{h,m}"
   s.frameworks   = "Foundation", "UIKit", "MediaPlayer"
