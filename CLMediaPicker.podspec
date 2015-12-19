@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CLMediaPicker"
-  s.version      = "0.1"
+  s.version      = "0.2"
   s.summary      = "Drop-in replacement for MPMediaPickerController for iOS that provides much more flexibility"
   s.description  = <<-DESC
 CLMediaPicker is an open source (nearly drop-in) replacement for
