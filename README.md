@@ -43,7 +43,7 @@ to your pod file.
 ### Manually
 
 Alternatively, you can just copy the CLMediaPicker sub-directory into
-your project.
+your project and make sure to include the MediaPlayer framework.
 
 ## Example
 
@@ -60,7 +60,14 @@ or if installed manually:
 ```
 #include "CLMediaPicker.h"
 ```
-Step 2: Set up delegate
+
+Step 2: Mark your class as implementing CLMediaPickerDelegate protocol
+
+```
+@interface ViewController : UIViewController<CLMediaPickerDelegate>
+```
+
+Step 3: Set up delegate
 
 ```
 #pragma mark - CLMediaPickerDelegate
@@ -75,11 +82,12 @@ Step 2: Set up delegate
 
 - (void)clMediaPickerDidCancel:(CLMediaPicker *)mediaPicker
 {
-    [self.detailsDelegate closeDetailsViewController];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 ```
-Step 3: Instantiate and show view controller
+
+Step 4: Instantiate and show view controller
 
 ```
 CLMediaPicker *picker = [[CLMediaPicker alloc] init];
@@ -99,6 +107,7 @@ picker.delegate = self;
 picker.allowsPickingMultipleItems = YES;
 picker.showsCloudItems = NO;
 picker.isModal = YES;
+UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:picker];
 [self presentViewController:navController animated:YES completion:nil];
 ```
 

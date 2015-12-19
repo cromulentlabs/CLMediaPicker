@@ -57,6 +57,9 @@ static const CGFloat kHeaderHeight = 28;
 		NSString* path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"CLMediaPicker.bundle"];
 		bundle = [NSBundle bundleWithPath:path];
 	}
+	if (!bundle) {
+		return key;
+	}
 	
 	return [bundle localizedStringForKey:key value:key table:@"CLMediaPickerLocalizable"];
 }
