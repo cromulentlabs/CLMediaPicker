@@ -18,6 +18,7 @@
 //
 
 #import "CLMediaTypeEntry.h"
+#import "CLMediaPicker.h"
 
 @implementation CLMediaTypeEntry
 
@@ -27,35 +28,35 @@
 		self.mediaType = mediaType;
 		switch (mediaType) {
 			case CLMediaPickerAlbums:
-				self.title = NSLocalizedString(@"Albums", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Albums"];
 				self.icon = [UIImage imageNamed:@"album"];
 				break;
 			case CLMediaPickerArtists:
-				self.title = NSLocalizedString(@"Artists", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Artists"];
 				self.icon = [UIImage imageNamed:@"artist"];
 				break;
 			case CLMediaPickerPlaylists:
-				self.title = NSLocalizedString(@"Playlists", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Playlists"];
 				self.icon = [UIImage imageNamed:@"playlist"];
 				break;
 			case CLMediaPickerSongs:
-				self.title = NSLocalizedString(@"Songs", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Songs"];
 				self.icon = [UIImage imageNamed:@"song"];
 				break;
 			case CLMediaPickerPodcasts:
-				self.title = NSLocalizedString(@"Podcasts", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Podcasts"];
 				self.icon = [UIImage imageNamed:@"podcast"];
 				break;
 			case CLMediaPickerAudiobooks:
-				self.title = NSLocalizedString(@"Audiobooks", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Audiobooks"];
 				self.icon = [UIImage imageNamed:@"audiobook"];
 				break;
 			case CLMediaPickerGenre:
-				self.title = NSLocalizedString(@"Genres", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Genres"];
 				self.icon = [UIImage imageNamed:@"genre"];
 				break;
 			default:
-				self.title = NSLocalizedString(@"Unknown", nil);
+				self.title = [CLMediaPicker localizedStringForKey:@"Unknown"];
 				self.icon = nil;
 				break;
 		}

@@ -55,6 +55,8 @@ static inline CLMediaPickerType CLMediaPickerTypeLast() { return CLMediaPickerGe
 @property(nonatomic, strong) UIColor *tableViewCellTextColor;
 @property(nonatomic, strong) UIColor *tableViewCellSubtitleColor;
 
++ (NSString *)localizedStringForKey:(NSString *)key;
+
 - (void)activityStarted; // Subclasses can override to show their own activity indicator.
 - (void)activityEnded; // Subclasses can override to hide their own activity indicator.
 

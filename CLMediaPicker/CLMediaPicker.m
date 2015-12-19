@@ -51,6 +51,17 @@ static const CGFloat kHeaderHeight = 28;
 
 @synthesize mediaTypes = mediaTypes_;
 
++ (NSString *)localizedStringForKey:(NSString *)key {
+	static NSBundle* bundle = nil;
+	if (!bundle) {
+		NSString* path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"CLMediaPicker.bundle"];
+		bundle = [NSBundle bundleWithPath:path];
+	}
+	
+	return [bundle localizedStringForKey:key value:key table:@"CLMediaPickerLocalizable"];
+}
+
+
 - (instancetype)init {
 	self = [super init];
 	if (self) {
@@ -72,17 +83,17 @@ static const CGFloat kHeaderHeight = 28;
 	
 	UIBarButtonItem *backButton = nil;
 	if (self.backButtonImage) {
-		backButton = [self toolbarItemForImage:self.backButtonImage target:self action:@selector(backButtonAction:) accessibilityLabel:NSLocalizedString(@"Back", nil)];
+		backButton = [self toolbarItemForImage:self.backButtonImage target:self action:@selector(backButtonAction:) accessibilityLabel:[CLMediaPicker localizedStringForKey:@"Back"]];
 	}
 	UIBarButtonItem *cancelButton = nil;
 	if (self.cancelButtonImage) {
-		cancelButton = [self toolbarItemForImage:self.cancelButtonImage target:self action:@selector(cancelButtonAction:) accessibilityLabel:NSLocalizedString(@"Cancel", nil)];
+		cancelButton = [self toolbarItemForImage:self.cancelButtonImage target:self action:@selector(cancelButtonAction:) accessibilityLabel:[CLMediaPicker localizedStringForKey:@"Cancel"]];
 	}
 	else {
 		cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonAction:)];
 	}
 	if (self.doneButtonImage) {
-		self.doneButton = [self toolbarItemForImage:self.doneButtonImage target:self action:@selector(doneButtonAction:) accessibilityLabel:NSLocalizedString(@"Done", nil)];
+		self.doneButton = [self toolbarItemForImage:self.doneButtonImage target:self action:@selector(doneButtonAction:) accessibilityLabel:[CLMediaPicker localizedStringForKey:@"Done"]];
 	}
 	else {
 		self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonAction:)];
@@ -139,7 +150,7 @@ static const CGFloat kHeaderHeight = 28;
 		self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
 		self.searchBar.translucent = NO;
 		self.searchBar.backgroundColor = self.tableViewCellBackgroundColor;
-		self.searchBar.placeholder = NSLocalizedString(@"Search", nil);
+		self.searchBar.placeholder = [CLMediaPicker localizedStringForKey:@"Search"];
 		self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.searchBar sizeToFit];
 		
@@ -250,6 +261,7 @@ static const CGFloat kHeaderHeight = 28;
 	}
 	cell.detailTextLabel.text = nil;
 	cell.textLabel.text = nil;
+	cell.accessoryView = nil;
 	
 	CGSize iconSize = CGSizeMake(37, 37);
 
@@ -360,7 +372,7 @@ static const CGFloat kHeaderHeight = 28;
 		[addButton setFrame:CGRectMake(7, 7, 30, 30)];
 		[addButton setIndexPath:indexPath];
 		[addButton addTarget:self action:@selector(addButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-		[addButton setAccessibilityLabel:NSLocalizedString(@"Add All", nil)];
+		[addButton setAccessibilityLabel:[CLMediaPicker localizedStringForKey:@"Add All"]];
 		cell.accessoryView = addButton;
 	}
 	
@@ -735,11 +747,11 @@ static const CGFloat kHeaderHeight = 28;
 
 - (void)confirmChangesWithCompletionBlock:(void (^)(void))completionBlock {
 	if (self.pickedItems.count > 0) {
-		UIAlertController * actionController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Alert", nil)
-																				   message:NSLocalizedString(@"Are you sure you want to discard your changes?", nil)
+		UIAlertController * actionController = [UIAlertController alertControllerWithTitle:[CLMediaPicker localizedStringForKey:@"Alert"]
+																				   message:[CLMediaPicker localizedStringForKey:@"Are you sure you want to discard your changes?"]
 																			preferredStyle:UIAlertControllerStyleAlert];
 		
-		UIAlertAction* yesButton = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
+		UIAlertAction* yesButton = [UIAlertAction actionWithTitle:[CLMediaPicker localizedStringForKey:@"Yes"]
 															style:UIAlertActionStyleDefault
 														  handler:^(UIAlertAction * action) {
 			[actionController dismissViewControllerAnimated:YES completion:nil];
@@ -747,7 +759,7 @@ static const CGFloat kHeaderHeight = 28;
 				completionBlock();
 			}
 		}];
-		UIAlertAction* noButton = [UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil)
+		UIAlertAction* noButton = [UIAlertAction actionWithTitle:[CLMediaPicker localizedStringForKey:@"No"]
 														   style:UIAlertActionStyleCancel
 														 handler:^(UIAlertAction * action) {
 			[actionController dismissViewControllerAnimated:YES completion:nil];
@@ -887,7 +899,7 @@ static const CGFloat kHeaderHeight = 28;
 
 - (void)updateTitle {
 	if (self.pickedItems.count == 0) {
-		self.title = NSLocalizedString(@"choose items", nil);
+		self.title = [CLMediaPicker localizedStringForKey:@"choose items"];
 		self.doneButton.enabled = NO;
 	}
 	else {
@@ -901,7 +913,7 @@ static const CGFloat kHeaderHeight = 28;
 				count++;
 			}
 		}
-		self.title = [NSString stringWithFormat:NSLocalizedString(@"%li items", nil), (unsigned long)count];
+		self.title = [NSString stringWithFormat:[CLMediaPicker localizedStringForKey:@"%li items"], (unsigned long)count];
 		self.doneButton.enabled = YES;
 	}
 }
