@@ -91,6 +91,6 @@ picker.delegate = self;
 picker.allowsPickingMultipleItems = YES;
 picker.showsCloudItems = NO;
 picker.isModal = YES;
-[self presentViewController:navController animated:YES completion:nil]
+[self presentViewController:navController animated:YES completion:nil];
 ```
 
