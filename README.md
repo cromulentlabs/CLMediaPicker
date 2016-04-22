@@ -52,13 +52,13 @@ Step 1: Include header
 if using cocoapods:
 
 ```
-#include <CLMediaPicker/CLMediaPicker.h>
+#import <CLMediaPicker/CLMediaPicker.h>
 ```
 
 or if installed manually:
 
 ```
-#include "CLMediaPicker.h"
+#import "CLMediaPicker.h"
 ```
 
 Step 2: Mark your class as implementing CLMediaPickerDelegate protocol
