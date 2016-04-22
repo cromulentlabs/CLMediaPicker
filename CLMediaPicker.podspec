@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CLMediaPicker"
-  s.version      = "0.4"
+  s.version      = "0.5"
   s.summary      = "Drop-in replacement for MPMediaPickerController for iOS that provides much more flexibility"
   s.description  = <<-DESC
 CLMediaPicker is an open source (nearly drop-in) replacement for
@@ -36,8 +36,8 @@ Other features:
   s.author       = "Greg Gardner"
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/cromulentlabs/CLMediaPicker.git", :tag => "#{s.version}" }
-  s.source_files = "CLMediaPicker/**/*.{h,m}"
+  s.source_files = "CLMediaPicker/**/*.{h,m}", "CLMediaPicker/*.lproj"
   s.frameworks   = "Foundation", "UIKit", "MediaPlayer"
   s.requires_arc = true
-  s.resources    = ["CLMediaPicker/CLMediaPicker.bundle", "CLMediaPicker/CLMediaPickerImages.xcassets"]
+  s.resources    = ["CLMediaPicker/CLMediaPickerImages.xcassets"]
 end
