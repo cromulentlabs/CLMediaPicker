@@ -36,8 +36,7 @@ Other features:
   s.author       = "Greg Gardner"
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/cromulentlabs/CLMediaPicker.git", :tag => "#{s.version}" }
-  s.source_files = "CLMediaPicker/**/*.{h,m}", "CLMediaPicker/*.lproj"
+  s.source_files = "CLMediaPicker/**/*.{h,m}", "CLMediaPicker"
   s.frameworks   = "Foundation", "UIKit", "MediaPlayer"
   s.requires_arc = true
-  s.resources    = ["CLMediaPicker/CLMediaPickerImages.xcassets"]
 end
