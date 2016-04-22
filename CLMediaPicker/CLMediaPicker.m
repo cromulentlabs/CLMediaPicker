@@ -52,7 +52,16 @@ static const CGFloat kHeaderHeight = 28;
 @synthesize mediaTypes = mediaTypes_;
 
 + (NSString *)localizedStringForKey:(NSString *)key {
-	return [[NSBundle mainBundle] localizedStringForKey:key value:key table:@"CLMediaPickerLocalizable"];
+    static NSBundle* bundle = nil;
+    if (!bundle) {
+	NSString *path = [[NSBundle bundleForClass:[CLMediaPicker class]] pathForResource:@"CLMediaPickerLocalization" ofType:@"bundle"];
+	bundle = [NSBundle bundleWithPath:path];
+    }
+    if (!bundle) {
+	return key;
+    }
+    
+    return [bundle localizedStringForKey:key value:key table:@"CLMediaPickerLocalizable"];
 }
 
 
