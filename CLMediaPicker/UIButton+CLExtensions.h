@@ -1,5 +1,5 @@
 //
-//  UIButton+IndexPath.m
+//  UIButton+CLExtensions.h
 //  CLMediaPicker
 //
 // Copyright [2015] [Cromulent Labs, Inc.]
@@ -17,27 +17,11 @@
 // limitations under the License.
 //
 
-#import "UIButton+IndexPath.h"
-#import <objc/runtime.h>
+#import <UIKit/UIKit.h>
 
-static const NSString *kIndexPathKey = @"IndexPath";
+@interface UIButton (CLExtensions)
 
-@implementation UIButton (IndexPath)
-
-@dynamic indexPath;
-
-- (void)setIndexPath:(NSIndexPath *)indexPath {
-	objc_setAssociatedObject(self, &kIndexPathKey, indexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (NSIndexPath *)indexPath {
-	NSIndexPath *indexPath = (NSIndexPath *)objc_getAssociatedObject(self, &kIndexPathKey);
-	if (indexPath) {
-		return indexPath;
-	}
-	else {
-		return nil;
-	}
-}
+@property(nonatomic, strong) NSIndexPath *indexPath;
+@property(nonatomic, assign) UIEdgeInsets hitTestEdgeInsets;
 
 @end

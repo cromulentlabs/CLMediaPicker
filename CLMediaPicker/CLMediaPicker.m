@@ -20,7 +20,7 @@
 #import "CLMediaPicker.h"
 #import "CLMediaTypeEntry.h"
 #import "CLMediaTableViewCell.h"
-#import "UIButton+IndexPath.h"
+#import "UIButton+CLExtensions.h"
 
 static NSString *CLMediaPickerTableCell = @"CLMediaPickerTableCell";
 static NSString *TableViewHeaderSectionIdentifier = @"TableViewHeaderSectionIdentifier";
@@ -63,7 +63,6 @@ static const CGFloat kHeaderHeight = 28;
     
     return [bundle localizedStringForKey:key value:key table:@"CLMediaPickerLocalizable"];
 }
-
 
 - (instancetype)init {
 	self = [super init];
@@ -365,6 +364,10 @@ static const CGFloat kHeaderHeight = 28;
 			}
 		}
 		UIImage *icon = item.artwork && item.artwork.bounds.size.width && item.artwork.bounds.size.height ? [item.artwork imageWithSize:iconSize] : placeholderImage;
+		if ([self.delegate respondsToSelector:@selector(clMediaPicker:iconForArtworkImage:)])
+		{
+			icon = [self.delegate performSelector:@selector(clMediaPicker:iconForArtworkImage:) withObject:self withObject:icon];
+		}
 		cell.imageView.image = icon;
 		cell.accessoryType = mediaType == CLMediaPickerSongs ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
 	}
@@ -373,6 +376,7 @@ static const CGFloat kHeaderHeight = 28;
 		UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		[addButton setImage:[UIImage imageNamed:@"add_new"] forState:UIControlStateNormal];
 		[addButton setFrame:CGRectMake(7, 7, 30, 30)];
+		[addButton setHitTestEdgeInsets:UIEdgeInsetsMake(-7, -10, -7, -10)];
 		[addButton setIndexPath:indexPath];
 		[addButton addTarget:self action:@selector(addButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 		[addButton setAccessibilityLabel:[CLMediaPicker localizedStringForKey:@"Add All"]];
@@ -503,10 +507,20 @@ static const CGFloat kHeaderHeight = 28;
 			case CLMediaPickerPlaylists:
 			{
 				MPMediaPlaylist *playlist = (MPMediaPlaylist *)collection;
-				newQuery = [MPMediaQuery playlistsQuery];
-				[newQuery addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:@(playlist.persistentID) forProperty:MPMediaPlaylistPropertyPersistentID]];
-				newMediaType = CLMediaPickerSongs;
-				useItems = YES;
+				if ([[playlist valueForProperty:@"isFolder"] boolValue])
+				{
+					newQuery = [MPMediaQuery playlistsQuery];
+					[newQuery addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:@(playlist.persistentID) forProperty:@"parentPersistentID"]];
+					newMediaType = CLMediaPickerPlaylists;
+					useItems = NO;
+				}
+				else
+				{
+					newQuery = [MPMediaQuery playlistsQuery];
+					[newQuery addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:@(playlist.persistentID) forProperty:MPMediaPlaylistPropertyPersistentID]];
+					newMediaType = CLMediaPickerSongs;
+					useItems = YES;
+				}
 				break;
 			}
 			case CLMediaPickerGenre:
@@ -831,8 +845,16 @@ static const CGFloat kHeaderHeight = 28;
 				MPMediaPlaylist *playlist = (MPMediaPlaylist *)collection;
 				MPMediaQuery *query = [MPMediaQuery playlistsQuery];
 				[self addPredicates:query];
-				[query addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:@(playlist.persistentID) forProperty:MPMediaPlaylistPropertyPersistentID]];
-				[self.pickedItems addObjectsFromArray:query.items];
+				if ([[playlist valueForProperty:@"isFolder"] boolValue])
+				{
+					[query addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:@(playlist.persistentID) forProperty:@"parentPersistentID"]];
+					[self.pickedItems addObjectsFromArray:query.collections];
+				}
+				else
+				{
+					[query addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:@(playlist.persistentID) forProperty:MPMediaPlaylistPropertyPersistentID]];
+					[self.pickedItems addObjectsFromArray:query.items];
+				}
 			}
 			else if (collection.count > 0) {
 				[self.pickedItems addObject:collection];

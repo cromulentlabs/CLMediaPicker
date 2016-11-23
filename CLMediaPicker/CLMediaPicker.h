@@ -69,6 +69,7 @@ static inline CLMediaPickerType CLMediaPickerTypeLast() { return CLMediaPickerGe
 
 - (void)clMediaPicker:(CLMediaPicker *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection;
 - (void)clMediaPickerDidCancel:(CLMediaPicker *)mediaPicker;
+- (UIImage *)clMediaPicker:(CLMediaPicker *)mediaPicker iconForArtworkImage:(UIImage *)artworkImage;
 
 @end
 
