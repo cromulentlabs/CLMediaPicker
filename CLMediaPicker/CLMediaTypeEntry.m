@@ -29,31 +29,31 @@
 		switch (mediaType) {
 			case CLMediaPickerAlbums:
 				self.title = [CLMediaPicker localizedStringForKey:@"Albums"];
-				self.icon = [UIImage imageNamed:@"album"];
+				self.icon = [UIImage systemImageNamed:@"square.stack"];
 				break;
 			case CLMediaPickerArtists:
 				self.title = [CLMediaPicker localizedStringForKey:@"Artists"];
-				self.icon = [UIImage imageNamed:@"artist"];
+				self.icon = [UIImage systemImageNamed:@"music.mic"];
 				break;
 			case CLMediaPickerPlaylists:
 				self.title = [CLMediaPicker localizedStringForKey:@"Playlists"];
-				self.icon = [UIImage imageNamed:@"playlist"];
+				self.icon = [UIImage systemImageNamed:@"music.note.list"];
 				break;
 			case CLMediaPickerSongs:
 				self.title = [CLMediaPicker localizedStringForKey:@"Songs"];
-				self.icon = [UIImage imageNamed:@"song"];
+				self.icon = [UIImage systemImageNamed:@"music.note"];
 				break;
 			case CLMediaPickerPodcasts:
 				self.title = [CLMediaPicker localizedStringForKey:@"Podcasts"];
-				self.icon = [UIImage imageNamed:@"podcast"];
+				self.icon = [UIImage systemImageNamed:@"antenna.radiowaves.left.and.right"];
 				break;
 			case CLMediaPickerAudiobooks:
 				self.title = [CLMediaPicker localizedStringForKey:@"Audiobooks"];
-				self.icon = [UIImage imageNamed:@"audiobook"];
+				self.icon = [UIImage systemImageNamed:@"book"];
 				break;
 			case CLMediaPickerGenre:
 				self.title = [CLMediaPicker localizedStringForKey:@"Genres"];
-				self.icon = [UIImage imageNamed:@"genre"];
+				self.icon = [UIImage systemImageNamed:@"guitars"];
 				break;
 			default:
 				self.title = [CLMediaPicker localizedStringForKey:@"Unknown"];

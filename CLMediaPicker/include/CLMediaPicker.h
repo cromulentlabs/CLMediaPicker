@@ -45,6 +45,7 @@ static inline CLMediaPickerType CLMediaPickerTypeLast() { return CLMediaPickerGe
 @property(nonatomic) BOOL allowsPickingMultipleItems; // default is NO
 @property(nonatomic) BOOL showsCloudItems; // default is YES
 @property(nonatomic) BOOL isModal; // default is NO
+@property(nonatomic) CGFloat rowHeight; // default is 44
 
 @property(nonatomic, strong) UIImage *backButtonImage; // if unset, uses text-based button
 @property(nonatomic, strong) UIImage *cancelButtonImage; // if unset, uses text-based button

@@ -76,7 +76,8 @@ static const CGFloat kHeaderHeight = 28;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-	
+
+	[self.navigationController.navigationBar setTranslucent:NO];
 	[self activityStarted];
 
 	if (!self.pickedItems) {
@@ -146,7 +147,7 @@ static const CGFloat kHeaderHeight = 28;
 	
 	// set up search controller
 	if (!self.query) {
-		self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+		self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
 		self.searchBar.tintColor = self.tableViewCellTextColor;
 		self.searchBar.barTintColor = self.tableViewCellTextColor;
 		self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
@@ -319,37 +320,37 @@ static const CGFloat kHeaderHeight = 28;
 		switch (mediaType) {
 			case CLMediaPickerArtists:
 				cell.textLabel.text = item.artist ? item.artist : item.albumArtist;
-				placeholderImage = [UIImage imageNamed:@"artist"];
+				placeholderImage = [UIImage systemImageNamed:@"music.mic"];
 				break;
 			case CLMediaPickerAlbums:
 				cell.textLabel.text = item.albumTitle;
-				placeholderImage = [UIImage imageNamed:@"album"];
+				placeholderImage = [UIImage systemImageNamed:@"square.stack"];
 				cell.detailTextLabel.text = item.artist;
 				break;
 			case CLMediaPickerPodcasts:
 				cell.textLabel.text = item.podcastTitle;
-				placeholderImage = [UIImage imageNamed:@"podcast"];
+				placeholderImage = [UIImage systemImageNamed:@"antenna.radiowaves.left.and.right"];
 				break;
 			case CLMediaPickerAudiobooks:
 				cell.textLabel.text = item.albumTitle;
-				placeholderImage = [UIImage imageNamed:@"audiobook"];
+				placeholderImage = [UIImage systemImageNamed:@"book"];
 				break;
 			case CLMediaPickerPlaylists:
 			{
 				MPMediaPlaylist *playlist = (MPMediaPlaylist *)collection;
 				cell.textLabel.text = playlist.name;
-				placeholderImage = [UIImage imageNamed:@"playlist"];
+				placeholderImage = [UIImage systemImageNamed:@"music.note.list"];
 				break;
 			}
 			case CLMediaPickerGenre:
 				cell.textLabel.text = item.genre;
-				placeholderImage = [UIImage imageNamed:@"genre"];
+				placeholderImage = [UIImage systemImageNamed:@"guitars"];
 				break;
 			default:
 				if (item) {
 					cell.textLabel.text = item.title;
 					cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", item.artist, item.albumTitle];
-					placeholderImage = [UIImage imageNamed:@"song"];
+					placeholderImage = [UIImage systemImageNamed:@"music.note"];
 				}
 				break;
 		}
@@ -374,7 +375,7 @@ static const CGFloat kHeaderHeight = 28;
 	
 	if (self.allowsPickingMultipleItems && (self.isSearching || self.query)) {
 		UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		[addButton setImage:[UIImage imageNamed:@"add_new"] forState:UIControlStateNormal];
+		[addButton setImage:[UIImage systemImageNamed:@"plus.circle"] forState:UIControlStateNormal];
 		[addButton setFrame:CGRectMake(7, 7, 30, 30)];
 		[addButton setHitTestEdgeInsets:UIEdgeInsetsMake(-7, -10, -7, -10)];
 		[addButton setIndexPath:indexPath];
@@ -393,7 +394,7 @@ static const CGFloat kHeaderHeight = 28;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 44;
+	return self.rowHeight <= 0 ? 44 : self.rowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -595,6 +596,7 @@ static const CGFloat kHeaderHeight = 28;
 	picker.query = [self.query copyWithZone:zone];
 	picker.showsCloudItems = self.showsCloudItems;
 	picker.allowsPickingMultipleItems = self.allowsPickingMultipleItems;
+	picker.rowHeight = self.rowHeight;
 	picker.currentMediaType = self.currentMediaType;
 	picker.backButtonImage = self.backButtonImage;
 	picker.cancelButtonImage = self.cancelButtonImage;
