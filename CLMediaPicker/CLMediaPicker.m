@@ -122,6 +122,7 @@ static const CGFloat kHeaderHeight = 28;
 	
 	// setup table view
 	self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+	self.tableView.backgroundColor = UIColor.greenColor;
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
 	if (self.tableViewCellBackgroundColor) {
@@ -130,6 +131,8 @@ static const CGFloat kHeaderHeight = 28;
 	self.tableView.sectionIndexBackgroundColor = self.tableViewCellBackgroundColor;
 	self.tableView.sectionIndexColor = self.tableViewCellTextColor;
 	self.tableView.separatorColor = self.tableViewSeparatorColor;
+	[self.tableView setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+	self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 	[self.tableView registerClass:[UITableViewHeaderFooterView class] forHeaderFooterViewReuseIdentifier:TableViewHeaderSectionIdentifier];
 	[self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
 	[self.view addSubview:self.tableView];
@@ -137,13 +140,6 @@ static const CGFloat kHeaderHeight = 28;
 	if ([self.tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)]) {
 		[self.tableView setCellLayoutMarginsFollowReadableWidth:NO];
 	}
-
-	[self.view addConstraints:[NSLayoutConstraint
-							   constraintsWithVisualFormat:@"H:|[tableView]|"
-							   options:NSLayoutFormatAlignAllCenterX
-							   metrics:nil
-							   views:@{@"tableView" : self.tableView}
-							   ]];
 	
 	// set up search controller
 	if (!self.query) {
@@ -156,44 +152,30 @@ static const CGFloat kHeaderHeight = 28;
 		self.searchBar.placeholder = [CLMediaPicker localizedStringForKey:@"Search"];
 		self.searchBar.translatesAutoresizingMaskIntoConstraints = NO;
 		[self.searchBar sizeToFit];
-		
+
 		self.searchBar.delegate = self;
-		self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+		self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view addSubview:self.searchBar];
-		
-		[self.view addConstraints:[NSLayoutConstraint
-								   constraintsWithVisualFormat:@"H:|[searchBar]|"
-								   options:NSLayoutFormatAlignAllCenterX
-								   metrics:nil
-								   views:@{@"searchBar" : self.searchBar}
-								   ]];
-		
-		[self.view addConstraints:[NSLayoutConstraint
-								   constraintsWithVisualFormat:@"V:|[searchBar][tableView]|"
-								   options:NSLayoutFormatAlignAllCenterX
-								   metrics:nil
-								   views:@{@"searchBar" : self.searchBar, @"tableView" : self.tableView}
-								   ]];
+
+		[NSLayoutConstraint activateConstraints:@[
+			[self.searchBar.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+			[self.searchBar.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+			[self.searchBar.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+			[self.tableView.topAnchor constraintEqualToAnchor:self.searchBar.bottomAnchor],
+			[self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+			[self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+			[self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		]];
+	} else {
+		[NSLayoutConstraint activateConstraints:@[
+			[self.tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+			[self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+			[self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+			[self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+		]];
 	}
-	else {
-		[self.view addConstraints:[NSLayoutConstraint
-								   constraintsWithVisualFormat:@"V:|[tableView]|"
-								   options:NSLayoutFormatAlignAllCenterX
-								   metrics:nil
-								   views:@{@"tableView" : self.tableView}
-								   ]];
-	}
-	
+
 	[self loadItems];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	[self updateTitle];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -390,7 +372,7 @@ static const CGFloat kHeaderHeight = 28;
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	return self.isSearching || (self.currentMediaType == CLMediaPickerSongs && self.topLevelView) ? kHeaderHeight : 0;
+	return self.isSearching || (self.currentMediaType == CLMediaPickerSongs && self.topLevelView) ? kHeaderHeight : 0.01f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -5,7 +5,7 @@ let package = Package(
     name: "CLMediaPicker",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         .library(
