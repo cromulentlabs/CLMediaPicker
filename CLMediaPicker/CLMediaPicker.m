@@ -122,7 +122,6 @@ static const CGFloat kHeaderHeight = 28;
 	
 	// setup table view
 	self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-	self.tableView.backgroundColor = UIColor.greenColor;
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
 	if (self.tableViewCellBackgroundColor) {
