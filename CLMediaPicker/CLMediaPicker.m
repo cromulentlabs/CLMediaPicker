@@ -69,6 +69,7 @@ static const CGFloat kHeaderHeight = 28;
 	if (self) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardDidHideNotification object:nil];
+        self.topLevelView = YES;
 	}
 	return self;
 }
@@ -210,7 +211,10 @@ static const CGFloat kHeaderHeight = 28;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (self.isSearching) {
+    if (!self.topLevelView && self.mockItems) {
+        return self.mockItems.count;
+    }
+    else if (self.isSearching) {
 		NSArray *rows = self.filteredItems[self.filteredIndex[section]];
 		return rows.count;
 	}
@@ -251,10 +255,17 @@ static const CGFloat kHeaderHeight = 28;
 
 	MPMediaItemCollection *collection;
 	MPMediaItem *item;
+    CLMockMediaItem *mockItem;
 	CLMediaPickerType mediaType = self.currentMediaType;
 	BOOL topLevel = NO;
-	
-	if (self.isSearching) {
+
+    if (!self.topLevelView && self.mockItems) {
+        if (indexPath.row < self.mockItems.count) {
+            mockItem = self.mockItems[indexPath.row];
+            mediaType = CLMediaPickerSongs;
+        }
+    }
+	else if (self.isSearching) {
 		if (self.filteredIndex.count > indexPath.section) {
 			NSString *key = self.filteredIndex[indexPath.section];
 			NSArray *collections = [self.filteredItems objectForKey:key];
@@ -328,7 +339,14 @@ static const CGFloat kHeaderHeight = 28;
 				placeholderImage = [UIImage systemImageNamed:@"guitars"];
 				break;
 			default:
-				if (item) {
+                if (mockItem)
+                {
+                    cell.textLabel.text = mockItem.title;
+                    cell.detailTextLabel.text = mockItem.artist;
+                    placeholderImage = [UIImage systemImageNamed:@"music.note"];
+                }
+				else if (item)
+                {
 					cell.textLabel.text = item.title;
 					cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", item.artist, item.albumTitle];
 					placeholderImage = [UIImage systemImageNamed:@"music.note"];
@@ -350,11 +368,15 @@ static const CGFloat kHeaderHeight = 28;
 		{
 			icon = [self.delegate performSelector:@selector(clMediaPicker:iconForArtworkImage:) withObject:self withObject:icon];
 		}
+        if (mockItem && mockItem.artwork)
+        {
+            icon = mockItem.artwork;
+        }
 		cell.imageView.image = icon;
 		cell.accessoryType = mediaType == CLMediaPickerSongs ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
 	}
 	
-	if (self.allowsPickingMultipleItems && (self.isSearching || self.query)) {
+    if (self.allowsPickingMultipleItems && (self.isSearching || self.query || self.mockItems)) {
 		UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		[addButton setImage:[UIImage systemImageNamed:@"plus.circle"] forState:UIControlStateNormal];
 		[addButton setFrame:CGRectMake(7, 7, 30, 30)];
@@ -515,8 +537,16 @@ static const CGFloat kHeaderHeight = 28;
 				break;
 		}
 	}
-	
-	if (newQuery) {
+
+    if (self.mockItems) {
+        CLMediaPicker *picker = [self copy];
+        picker.topLevelView = NO;
+        picker.currentMediaType = newMediaType;
+        picker.useItems = useItems;
+        picker.mockItems = self.mockItems;
+        [self.navigationController pushViewController:picker animated:YES];
+    }
+	else if (newQuery) {
 		[self addPredicates:newQuery];
 		CLMediaPicker *picker = [self copy];
 		picker.query = newQuery;
@@ -524,6 +554,9 @@ static const CGFloat kHeaderHeight = 28;
 		if (!self.query && !self.isSearching) {
 			picker.topLevelView = YES;
 		}
+        else {
+            picker.topLevelView = NO;
+        }
 		picker.useItems = useItems;
 		[self.navigationController pushViewController:picker animated:YES];
 	}
@@ -798,7 +831,10 @@ static const CGFloat kHeaderHeight = 28;
 	if (!indexPath) {
 		return;
 	}
-	if (self.isSearching) {
+    if (self.mockItems) {
+        [self.pickedItems addObjectsFromArray:self.mockItems];
+    }
+	else if (self.isSearching) {
 		NSString *key = self.filteredIndex[indexPath.section];
 		NSArray *collections = [self.filteredItems objectForKey:key];
 		MPMediaItemCollection *collection = collections[indexPath.row];

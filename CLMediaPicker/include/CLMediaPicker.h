@@ -36,6 +36,14 @@ typedef enum {
 static inline CLMediaPickerType CLMediaPickerTypeFirst() { return CLMediaPickerArtists; }
 static inline CLMediaPickerType CLMediaPickerTypeLast() { return CLMediaPickerGenre; }
 
+@interface CLMockMediaItem : NSObject
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *artist;
+@property (nonatomic, strong) UIImage *artwork;
+
+- (instancetype)initWithTitle:(NSString *)title artist:(NSString *)artist artwork:(UIImage *)artwork;
+@end
+
 @interface CLMediaPicker : UIViewController<NSCopying, UISearchBarDelegate>
 
 - (instancetype)init;
@@ -46,6 +54,8 @@ static inline CLMediaPickerType CLMediaPickerTypeLast() { return CLMediaPickerGe
 @property(nonatomic) BOOL showsCloudItems; // default is YES
 @property(nonatomic) BOOL isModal; // default is NO
 @property(nonatomic) CGFloat rowHeight; // default is 44
+
+@property(nonatomic, strong) NSArray<CLMockMediaItem *> *mockItems;
 
 @property(nonatomic, strong) UIImage *backButtonImage; // if unset, uses text-based button
 @property(nonatomic, strong) UIImage *cancelButtonImage; // if unset, uses text-based button
